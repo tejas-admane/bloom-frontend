@@ -783,11 +783,12 @@
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
   <script>
     // ============================================
     // Configuration & Constants
     // ============================================
-
+    
    const API_URL = "https://tejz-blooms-taxonomy-api.hf.space/predict";
 
 
@@ -924,27 +925,28 @@
       return card;
     }
 
-    // ============================================
-    // API Functions
-    // ============================================
-    
-  async function getPrediction() {
-    const question = document.getElementById("question").value;
-    const res = await fetch("https://tejz-blooms-taxonomy-api.hf.space/predict", {
-     method: "POST",
-     headers: { "Content-Type": "application/json" },
-     body: JSON.stringify({ text: question })
-   });
-   const data = await res.json();
-   console.log(data);
-   document.getElementById("output").innerText =
-     JSON.stringify(data, null, 2);
-  }
-  
+    // API Function
     // ============================================
     // Event Handlers
     // ============================================
-    
+    // ============================================
+    // Core Prediction Function
+    // ============================================
+    async function predictBloomLevels(text) {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: text }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`API returned ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data;
+    }
+
     elements.predictBtn.addEventListener("click", async () => {
       const text = elements.questionInput.value.trim();
 
