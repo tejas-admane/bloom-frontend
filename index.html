@@ -789,8 +789,7 @@
     // Configuration & Constants
     // ============================================
     
-   const API_URL = "https://tejz-blooms-taxonomy-api.hf.space/predict";
-
+   const API_URL = "https://tejz-blooms-taxonomy-api.hf.space/api/predict";
 
     const BLOOM_LEVELS = ['Remember', 'Understand', 'Apply', 'Analyze', 'Evaluate', 'Create'];
     
@@ -936,7 +935,12 @@
       const response = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: text }),
+        body: JSON.stringify({
+          questions: text
+            .split("\n")
+            .map(q => q.trim())
+            .filter(q => q !== "")
+        }),
       });
 
       if (!response.ok) {
