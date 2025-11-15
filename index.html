@@ -803,11 +803,11 @@
     };
 
     const EXAMPLE_QUESTIONS = `1. What is the capital of France?
-2. Explain the process of photosynthesis in your own words.
-3. Calculate the area of a triangle with base 10cm and height 5cm.
-4. Compare and contrast mitosis and meiosis.
-5. Evaluate the effectiveness of renewable energy sources.
-6. Design a sustainable city planning system.`;
+    2. Explain the process of photosynthesis in your own words.
+    3. Calculate the area of a triangle with base 10cm and height 5cm.
+    4. Compare and contrast mitosis and meiosis.
+    5. Evaluate the effectiveness of renewable energy sources.
+    6. Design a sustainable city planning system.`;
 
     // ============================================
     // Cache DOM Elements
@@ -935,12 +935,11 @@
       const response = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          questions: text
-            .split("\n")
-            .map(q => q.trim())
-            .filter(q => q !== "")
-        }),
+       body: JSON.stringify({
+           text: text
+       }),
+
+
       });
 
       if (!response.ok) {
