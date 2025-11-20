@@ -4,9 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bloom's Taxonomy Classifier</title>
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-
   <style>
     :root {
       --bg-color: #f5f7fa;
@@ -20,8 +18,9 @@
       --highlight: #9f7aea;
       --light-gray: #e2e8f0;
       --medium-gray: #cbd5e0;
+      --badge-text-light: #000000;
+      --badge-text-dark: #ffffff;
     }
-
     body.dark {
       --bg-color: #1a202c;
       --text-color: #f7fafc;
@@ -35,11 +34,7 @@
       --light-gray: #4a5568;
       --medium-gray: #2d3748;
     }
-
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: var(--bg-color);
@@ -52,7 +47,6 @@
       padding: 20px;
       transition: background 0.3s, color 0.3s;
     }
-
     .container {
       background: var(--card-bg);
       border-radius: 12px;
@@ -62,32 +56,18 @@
       padding: 30px;
       transition: background 0.3s;
     }
-
     h1 {
       color: var(--accent);
       margin-bottom: 10px;
       text-align: center;
       font-size: 2rem;
     }
-
     .subtitle {
       text-align: center;
       color: var(--text-color);
       opacity: 0.8;
       margin-bottom: 20px;
     }
-
-    /* ---- New Helper Line Added ---- */
-    .helper-line {
-      font-size: 0.9rem;
-      margin-bottom: 10px;
-      color: #333;
-      opacity: 0.75;
-    }
-    body.dark .helper-line {
-      color: #ddd;
-    }
-
     .info-banner {
       background: linear-gradient(135deg, #ebf8ff, #e6fffa);
       border-left: 4px solid var(--secondary);
@@ -100,19 +80,19 @@
       font-size: 0.9rem;
       color: #1a202c;
     }
-
     body.dark .info-banner {
       background: linear-gradient(135deg, #2d3748, #1a202c);
       border-left-color: var(--accent);
       color: #ffffff;
     }
-
+    .info-banner i { color: var(--secondary); font-size: 1.2rem; }
+    body.dark .info-banner i { color: var(--accent); }
+    body.dark .info-banner kbd { background: var(--secondary); color: #ffffff; }
     .textarea-container {
       position: relative;
       width: 100%;
       margin-bottom: 15px;
     }
-
     textarea {
       width: 100%;
       padding: 12px;
@@ -127,13 +107,11 @@
       transition: all 0.3s ease-in-out;
       min-height: 150px;
     }
-
     textarea:focus {
       outline: none;
       border-color: var(--secondary);
       box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
     }
-
     textarea.fullscreen {
       position: fixed;
       top: 50%;
@@ -143,16 +121,15 @@
       transform: translate(-50%, -50%);
       z-index: 1000;
       background: var(--card-bg);
-      box-shadow: 0 0 30px rgba(0,0,0,0.5);
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
       border-radius: 12px;
       padding: 20px;
     }
-
     .icon-btn {
       position: absolute;
       right: 10px;
       top: 10px;
-      background: #ffffff;
+      background: transparent;
       color: #444;
       border: 1px solid #ccc;
       border-radius: 6px;
@@ -162,18 +139,16 @@
       transition: 0.3s;
       z-index: 10;
     }
-
     body.dark .icon-btn {
-      background: #2d3748;
+      background: transparent;
       color: var(--text-color);
       border-color: var(--secondary);
     }
-
     .icon-btn:hover {
       background: rgba(0, 0, 0, 0.05);
       transform: scale(1.05);
     }
-
+    body.dark .icon-btn:hover { background: rgba(255, 255, 255, 0.1); }
     #exitFullscreenBtn {
       display: none;
       position: fixed;
@@ -187,28 +162,33 @@
       height: 45px;
       font-size: 20px;
       cursor: pointer;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
       z-index: 1500;
+      transition: 0.3s;
     }
-
     body.dark #exitFullscreenBtn {
+      background: transparent;
       color: #f7fafc;
       border-color: #63b3ed;
     }
-
     #exitFullscreenBtn.show {
       display: flex;
       align-items: center;
       justify-content: center;
     }
-
+    #exitFullscreenBtn:hover {
+      transform: scale(1.1);
+      background: rgba(0, 0, 0, 0.05);
+    }
+    body.dark #exitFullscreenBtn:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
     .btn-group {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
       margin-bottom: 20px;
     }
-
     button {
       background-color: var(--accent);
       color: white;
@@ -217,12 +197,29 @@
       border-radius: 8px;
       font-size: 1rem;
       cursor: pointer;
-      transition: 0.3s;
+      transition: all 0.3s;
       font-weight: 500;
       flex: 1;
       min-width: 120px;
     }
-
+    button:hover:not(:disabled) {
+      opacity: 0.9;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    button:active:not(:disabled) { transform: translateY(0); }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+    button.secondary {
+      background-color: var(--secondary);
+      color: var(--text-color);
+    }
+    button.example-btn {
+      background: linear-gradient(135deg, #055878, #f6ad55);
+      color: white;
+    }
+    button.example-btn:hover:not(:disabled) {
+      background: linear-gradient(135deg, #dd6b20, #055878);
+    }
     .loader {
       text-align: center;
       font-size: 1.2rem;
@@ -231,23 +228,54 @@
       display: none;
       animation: pulse 1.5s ease-in-out infinite;
     }
-
     @keyframes pulse {
       0%, 100% { opacity: 1; }
       50% { opacity: 0.5; }
     }
-
-    .output {
-      margin-top: 20px;
-    }
-
+    .output { margin-top: 20px; }
     .empty-state {
       text-align: center;
       padding: 40px 20px;
+      color: var(--text-color);
       opacity: 0.6;
       font-size: 1.1rem;
     }
-
+    .summary {
+      background: linear-gradient(135deg, #2d3748, #4299e1);
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(45, 55, 72, 0.3);
+    }
+    body.dark .summary {
+      background: linear-gradient(135deg, #000000, #1a202c);
+      color: white;
+    }
+    .summary h3 { margin: 0 0 10px 0; font-size: 1.3rem; }
+    .summary p { margin: 5px 0; font-size: 1rem; }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 10px;
+      margin-top: 15px;
+    }
+    .stat-item {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .stat-item .number {
+      font-size: 1.5rem;
+      font-weight: bold;
+      display: block;
+    }
+    .stat-item .label {
+      font-size: 0.8rem;
+      opacity: 0.9;
+    }
     .result-card {
       background: #135c98;
       border: 2px solid var(--light-gray);
@@ -255,106 +283,309 @@
       margin-bottom: 15px;
       border-radius: 12px;
       border-left: 5px solid var(--accent);
+      transition: all 0.3s;
       animation: slideIn 0.4s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
-
+    body.dark .result-card {
+      background: #000000;
+      border-color: #4a5568;
+    }
     @keyframes slideIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
-    body.dark .result-card {
-      background: #000;
+    .result-card:hover {
+      transform: translateX(5px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      border-left-color: var(--secondary);
     }
-
-    .question-text {
+    .result-card .question-text {
       font-size: 1rem;
       line-height: 1.6;
       margin-bottom: 12px;
-      color: #fff;
+      color: #ffffff;
+      font-weight: 500;
     }
-
+    body.dark .result-card .question-text {
+      color: var(--text-color);
+    }
+    .result-card .level-text {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+      color: #ffffff;
+    }
+    body.dark .result-card .level-text {
+      color: var(--text-color);
+    }
+    .result-card .level-text strong { color: #ffffff; }
+    body.dark .result-card .level-text strong { color: var(--accent); }
     .bloom-badge {
       display: inline-block;
       padding: 6px 14px;
       border-radius: 20px;
       font-weight: 600;
+      font-size: 0.9rem;
       margin-left: 8px;
       color: white;
     }
-
+    .bloom-Remember { background: #2d3748; border-color: #2d3748; }
+    .bloom-Understand { background: #4299e1; border-color: #4299e1; }
+    .bloom-Apply { background: #48bb78; border-color: #48bb78; }
+    .bloom-Analyze { background: #ed8936; border-color: #ed8936; }
+    .bloom-Evaluate { background: #9f7aea; border-color: #9f7aea; }
+    .bloom-Create { background: #f56565; border-color: #f56565; }
+    .copied, .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--success);
+      color: white;
+      padding: 15px 25px;
+      border-radius: 10px;
+      animation: toastSlide 0.3s ease;
+      z-index: 2000;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .toast.error { background: var(--error); }
+    .toast.warning { background: var(--warning); }
+    @keyframes toastSlide {
+      from { transform: translateX(400px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    .help-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: var(--accent);
+      color: white;
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transition: 0.3s;
+      z-index: 100;
+    }
+    .help-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 3000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal.show { display: flex; }
+    .modal-content {
+      background: var(--card-bg);
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      animation: modalZoom 0.3s ease;
+    }
+    @keyframes modalZoom {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .modal-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text-color);
+      width: 35px;
+      height: 35px;
+      padding: 0;
+    }
+    .modal h2 { color: var(--accent); margin-top: 0; }
+    .bloom-level {
+      margin: 15px 0;
+      padding: 15px;
+      background: var(--light-gray);
+      border-radius: 8px;
+      border-left: 4px solid var(--secondary);
+      transition: all 0.3s;
+    }
+    .bloom-level:hover {
+      transform: translateX(3px);
+      border-left-color: var(--accent);
+    }
+    .bloom-level h4 { margin: 0 0 8px 0; color: var(--accent); font-size: 1.1rem; }
+    .bloom-level p { margin: 5px 0; font-size: 0.9rem; line-height: 1.6; }
+    .keyboard-hint {
+      font-size: 0.85rem;
+      color: var(--text-color);
+      opacity: 0.7;
+      margin-top: 10px;
+      text-align: center;
+    }
+    .keyboard-hint kbd {
+      background: var(--secondary);
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-weight: bold;
+    }
+    @media (max-width: 768px) {
+      .container { padding: 20px; }
+      h1 { font-size: 1.5rem; }
+      .btn-group { flex-direction: column; }
+      button { width: 100%; min-width: auto; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .help-btn { bottom: 20px; right: 20px; width: 50px; height: 50px; }
+      .modal-content { margin: 20px; max-width: calc(100% - 40px); }
+    }
+    @media (max-width: 480px) {
+      body { padding: 10px; }
+      .container { padding: 15px; }
+      h1 { font-size: 1.3rem; }
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+    button.loading::after {
+      content: "";
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      top: 50%; left: 50%;
+      margin-left: -8px; margin-top: -8px;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spinner 0.6s linear infinite;
+    }
+    @keyframes spinner {
+      to { transform: rotate(360deg); }
+    }
+    button.loading {
+      position: relative;
+      color: transparent;
+    }
   </style>
 </head>
-
 <body>
-
   <div class="container">
-
     <h1>🌸 Bloom's Taxonomy Classifier</h1>
     <p class="subtitle">AI-powered educational question analysis</p>
+    <div class="info-banner">
+      <i class="fa-solid fa-info-circle"></i>
+      <span style="opacity:0.75;">
+       👉 <strong>Enter each question on its own line.</strong>  
+       Press <b>Enter</b> after each question. Press <b>Ctrl+Enter</b> to predict quickly.
+      </span>
 
-    <p class="helper-line">
-      👉 <strong>Enter each question on its own line.</strong> Press <b>Enter</b> after each question.
-    </p>
-
+    </div>
     <div class="textarea-container">
-      <textarea id="questionInput"
-        placeholder="Example:&#10;1. What is the capital of France?&#10;2. Explain how photosynthesis works.&#10;3. Design an experiment to test water quality.">
-      </textarea>
-
-      <button id="fullscreenBtn" class="icon-btn">
+      <textarea
+        id="questionInput"
+        placeholder="Example:&#10;1. What is the capital of France?&#10;2. Explain how photosynthesis works in your own words.&#10;3. Design an experiment to test water quality."
+        aria-label="Enter questions for Bloom's Taxonomy classification"
+      ></textarea>
+      <button id="fullscreenBtn" class="icon-btn" title="Toggle Full Screen" aria-label="Toggle fullscreen mode">
         <i class="fa-solid fa-expand"></i>
       </button>
     </div>
-
+    <p class="keyboard-hint" aria-label="Keyboard shortcut: Control and Enter for prediction">💡 Tip: Press <kbd>Ctrl</kbd> + <kbd>Enter</kbd> to predict</p>
     <div class="btn-group">
-      <button id="predictBtn">
+      <button id="predictBtn" aria-label="Predict Bloom levels">
         <i class="fa-solid fa-wand-magic-sparkles"></i> Predict Bloom Level
       </button>
-
-      <button id="exampleBtn" class="example-btn">
+      <button id="exampleBtn" class="example-btn" aria-label="Load example questions">
         <i class="fa-solid fa-lightbulb"></i> Try Example
       </button>
-
-      <button id="clearBtn" class="secondary">
+      <button id="clearBtn" class="secondary" aria-label="Clear all inputs and results">
         <i class="fa-solid fa-eraser"></i> Clear All
       </button>
-
-      <button id="copyBtn" class="secondary">
+      <button id="copyBtn" class="secondary" aria-label="Copy results to clipboard">
         <i class="fa-solid fa-copy"></i> Copy Results
       </button>
-
-      <button id="downloadBtn" class="secondary">
+      <button id="downloadBtn" class="secondary" aria-label="Download results as PDF">
         <i class="fa-solid fa-download"></i> Download PDF
       </button>
-
-      <button id="darkModeBtn" class="secondary">
+      <button id="darkModeBtn" class="secondary" aria-label="Toggle dark mode">
         <i class="fa-solid fa-moon"></i> Dark Mode
       </button>
     </div>
-
-    <div id="loader" class="loader">
-      <i class="fa-solid fa-spinner fa-spin"></i> Analyzing questions...
-    </div>
-
-    <div id="output" class="output">
+    <div id="loader" class="loader" role="status" aria-live="polite"><i class="fa-solid fa-spinner fa-spin"></i> Analyzing questions...</div>
+    <div id="output" class="output" role="region" aria-live="polite" aria-label="Prediction results">
       <div class="empty-state">
-        <i class="fa-solid fa-clipboard-question" style="font-size: 3rem; opacity:0.3;"></i>
+        <i class="fa-solid fa-clipboard-question" style="font-size: 3rem; opacity: 0.3; margin-bottom: 15px;"></i>
         <p>📝 Your predictions will appear here</p>
       </div>
     </div>
-
   </div>
-
-  <button id="exitFullscreenBtn">
+  <button id="exitFullscreenBtn" aria-label="Exit fullscreen mode">
     <i class="fa-solid fa-compress"></i>
   </button>
-
+  <button class="help-btn" id="helpBtn" aria-label="Open help and information">
+    <i class="fa-solid fa-question"></i>
+  </button>
+  <!-- Help Modal -->
+  <div id="helpModal" class="modal" role="dialog" aria-labelledby="modalTitle" aria-modal="true" tabindex="-1">
+    <div class="modal-content">
+      <button class="modal-close" id="modalClose" aria-label="Close modal">&times;</button>
+      <h2 id="modalTitle">📚 Bloom's Taxonomy Levels</h2>
+      <p>Bloom's Taxonomy classifies learning objectives into six cognitive levels:</p>
+      <div class="bloom-level">
+        <h4>🔴 Remember</h4>
+        <p><strong>Definition:</strong> Recall facts and basic concepts</p>
+        <p><strong>Keywords:</strong> define, list, recall, name, identify</p>
+      </div>
+      <div class="bloom-level">
+        <h4>🟠 Understand</h4>
+        <p><strong>Definition:</strong> Explain ideas or concepts</p>
+        <p><strong>Keywords:</strong> describe, explain, summarize, paraphrase</p>
+      </div>
+      <div class="bloom-level">
+        <h4>🟡 Apply</h4>
+        <p><strong>Definition:</strong> Use information in new situations</p>
+        <p><strong>Keywords:</strong> apply, calculate, solve, demonstrate</p>
+      </div>
+      <div class="bloom-level">
+        <h4>🟢 Analyze</h4>
+        <p><strong>Definition:</strong> Draw connections and distinguish between parts</p>
+        <p><strong>Keywords:</strong> analyze, compare, contrast, examine</p>
+      </div>
+      <div class="bloom-level">
+        <h4>🔵 Evaluate</h4>
+        <p><strong>Definition:</strong> Justify a decision or course of action</p>
+        <p><strong>Keywords:</strong> evaluate, judge, critique, assess</p>
+      </div>
+      <div class="bloom-level">
+        <h4>🟣 Create</h4>
+        <p><strong>Definition:</strong> Produce new or original work</p>
+        <p><strong>Keywords:</strong> create, design, construct, develop</p>
+      </div>
+      <p style="margin-top: 20px; font-size: 0.9rem; opacity: 0.8;">
+        <strong>Note:</strong> This tool uses AI to predict the Bloom level. Results should be reviewed by educators for accuracy.
+      </p>
+    </div>
+  </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
   <script>
     const API_URL = "https://blooms-api.onrender.com/predict";
-
+    const BLOOM_LEVELS = ['Remember', 'Understand', 'Apply', 'Analyze', 'Evaluate', 'Create'];
     const BLOOM_COLORS = {
       'Remember': '#2d3748',
       'Understand': '#4299e1',
@@ -363,14 +594,12 @@
       'Evaluate': '#9f7aea',
       'Create': '#f56565'
     };
-
     const EXAMPLE_QUESTIONS = `1. What is the capital of France?
-    2. Explain the process of photosynthesis in your own words.
-    3. Calculate the area of a triangle with base 10cm and height 5cm.
-    4. Compare and contrast mitosis and meiosis.
-    5. Evaluate the effectiveness of renewable energy sources.
-    6. Design a sustainable city planning system.`;
-
+2. Explain the process of photosynthesis in your own words.
+3. Calculate the area of a triangle with base 10cm and height 5cm.
+4. Compare and contrast mitosis and meiosis.
+5. Evaluate the effectiveness of renewable energy sources.
+6. Design a sustainable city planning system.`;
     const elements = {
       questionInput: document.getElementById("questionInput"),
       outputDiv: document.getElementById("output"),
@@ -382,61 +611,91 @@
       darkModeBtn: document.getElementById("darkModeBtn"),
       exampleBtn: document.getElementById("exampleBtn"),
       fullscreenBtn: document.getElementById("fullscreenBtn"),
-      exitFullscreenBtn: document.getElementById("exitFullscreenBtn")
+      exitFullscreenBtn: document.getElementById("exitFullscreenBtn"),
+      helpBtn: document.getElementById("helpBtn"),
+      helpModal: document.getElementById("helpModal"),
+      modalClose: document.getElementById("modalClose")
     };
-
     function sanitizeHTML(text) {
       const div = document.createElement('div');
       div.textContent = text || "";
       return div.innerHTML;
     }
-
     function showToast(message, type = 'success') {
-      const toast = document.createElement("div");
-      toast.classList.add("toast", type);
+      const toast = document.createElement('div');
+      toast.classList.add('toast', type);
+      toast.setAttribute('role', 'alert');
       toast.innerHTML = `
-        <i class="fa-solid fa-${type === "success" ? "check-circle" :
-                                type === "error" ? "exclamation-circle" :
-                                "info-circle"}"></i>
+        <i class="fa-solid fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
         <span>${sanitizeHTML(message)}</span>
       `;
       document.body.appendChild(toast);
       setTimeout(() => toast.remove(), 3000);
     }
-
     function setLoading(isLoading) {
       elements.loader.style.display = isLoading ? "block" : "none";
       elements.predictBtn.disabled = isLoading;
-
       if (isLoading) {
-        elements.predictBtn.classList.add("loading");
+        elements.predictBtn.classList.add('loading');
+        elements.predictBtn.setAttribute('aria-busy', 'true');
       } else {
-        elements.predictBtn.classList.remove("loading");
+        elements.predictBtn.classList.remove('loading');
+        elements.predictBtn.removeAttribute('aria-busy');
       }
     }
-
     function getBloomColor(level) {
-      return BLOOM_COLORS[level] || "#666";
+      return BLOOM_COLORS[level] || '#5c6bc0';
     }
-
+    function countBloomLevels(results) {
+      const counts = {};
+      BLOOM_LEVELS.forEach(level => counts[level] = 0);
+      results.forEach(res => {
+        if (counts[res.predicted_bloom_level] !== undefined) {
+          counts[res.predicted_bloom_level]++;
+        }
+      });
+      return counts;
+    }
+    function createSummary(results) {
+      const counts = countBloomLevels(results);
+      const summary = document.createElement("div");
+      summary.className = "summary";
+      const statsHTML = Object.entries(counts)
+        .filter(([_, count]) => count > 0)
+        .map(([level, count]) => `
+          <div class="stat-item">
+            <span class="number">${count}</span>
+            <span class="label">${level}</span>
+          </div>
+        `).join('');
+      summary.innerHTML = `
+        <h3>📊 Analysis Complete</h3>
+        <p>Total Questions Analyzed: <strong>${results.length}</strong></p>
+        <div class="stats-grid">
+          ${statsHTML}
+        </div>
+      `;
+      return summary;
+    }
     function createResultCard(res, index) {
       const card = document.createElement("div");
       card.classList.add("result-card");
       card.style.borderLeftColor = getBloomColor(res.predicted_bloom_level);
-      card.style.animationDelay = `${index * 0.1}s`;
 
-      let innerHTML = `
+      // Begin building content
+      let html = `
         <div class="question-text">${sanitizeHTML(res.question)}</div>
       `;
 
+      // NEW: Error handling section
       if (res.error) {
-        innerHTML += `
-          <div style="color: var(--error); font-weight: bold; margin-top: 10px;">
-            ⚠️ Error: ${sanitizeHTML(res.error)}
+        html += `
+          <div style="color: var(--error); margin-top: 10px; font-weight: 600;">
+            <strong>Error:</strong> ${sanitizeHTML(res.error)}
           </div>
         `;
       } else {
-        innerHTML += `
+        html += `
           <div class="level-text">
             <strong>Predicted Level:</strong>
             <span class="bloom-badge" style="background:${getBloomColor(res.predicted_bloom_level)};">
@@ -446,210 +705,210 @@
         `;
       }
 
-      card.innerHTML = innerHTML;
+      card.innerHTML = html;
       return card;
     }
 
-    async function predictBloomLevel(text) {
+    async function predictBloomLevel(question) {
       const response = await fetch(API_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text })
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({text: question})
       });
-
       if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
+        let errorData = "";
+        try { errorData = await response.text(); } catch (_) { errorData = "Unknown server error"; }
+        throw new Error(`API error: ${response.status} - ${errorData}`);
       }
-
-      return await response.json();
+      let data = null;
+      try { data = await response.json(); }
+      catch (err) { throw new Error("Server returned invalid JSON"); }
+      return data;
     }
-
     elements.predictBtn.addEventListener("click", async () => {
       const text = elements.questionInput.value.trim();
-
       if (!text) {
         showToast("Please enter at least one question!", "warning");
+        elements.questionInput.focus();
         return;
       }
-
       setLoading(true);
       elements.outputDiv.innerHTML = "";
-
       try {
         const data = await predictBloomLevel(text);
-
         if (data.results && data.results.length > 0) {
-          data.results.forEach((res, i) => {
-            elements.outputDiv.appendChild(createResultCard(res, i));
-          });
-
-          showToast("Analysis complete!", "success");
+          elements.outputDiv.appendChild(createSummary(data.results));
+          data.results.forEach((res, idx) => elements.outputDiv.appendChild(createResultCard(res, idx)));
+          showToast(`Successfully analyzed ${data.results.length} question(s)!`, "success");
         } else {
-          elements.outputDiv.innerHTML =
-            `<p style="text-align:center; color:gray;">No results returned.</p>`;
+          elements.outputDiv.innerHTML = `
+            <div class="empty-state">
+              <p>⚠️ No predictions received from server.</p>
+            </div>
+          `;
         }
-      }
-
-      catch (err) {
-        showToast("Unable to reach server. Check API or internet.", "error");
-
+      } catch (err) {
+        let errorMsg = "⚠️ Unable to connect to the prediction server.";
+        if (!navigator.onLine) {
+          errorMsg = "📡 No internet connection detected. Please check your network.";
+        } else if (err.message.includes('Failed to fetch')) {
+          errorMsg = "🔌 Cannot reach server. Make sure the API is running at " + API_URL;
+        } else {
+          errorMsg = "Error: " + err.message;
+        }
         elements.outputDiv.innerHTML = `
-          <div class="empty-state" style="color:red;">
-            <p>❌ Unable to connect to prediction server.</p>
+          <div class="empty-state" style="color: var(--error);">
+            <i class="fa-solid fa-triangle-exclamation" style="font-size: 3rem; margin-bottom: 15px;"></i>
+            <p>${sanitizeHTML(errorMsg)}</p>
           </div>
         `;
-      }
-
-      finally {
-        setLoading(false);
-      }
+        showToast(errorMsg, "error");
+      } finally { setLoading(false); }
     });
-
     elements.clearBtn.addEventListener("click", () => {
       elements.questionInput.value = "";
       elements.outputDiv.innerHTML = `
         <div class="empty-state">
-          <i class="fa-solid fa-clipboard-question" style="font-size:3rem;opacity:0.3;"></i>
+          <i class="fa-solid fa-clipboard-question" style="font-size: 3rem; opacity: 0.3; margin-bottom: 15px;"></i>
           <p>📝 Your predictions will appear here</p>
         </div>
       `;
-      showToast("Cleared!", "success");
+      showToast("Cleared all content", "success");
     });
-
     elements.exampleBtn.addEventListener("click", () => {
       elements.questionInput.value = EXAMPLE_QUESTIONS;
       elements.questionInput.focus();
-      showToast("Example questions loaded!", "success");
+      showToast("Example questions loaded! Click Predict to analyze.", "success");
     });
-
-    elements.fullscreenBtn.addEventListener("click", () => {
-      elements.questionInput.classList.add("fullscreen");
-      elements.exitFullscreenBtn.classList.add("show");
-    });
-
-    elements.exitFullscreenBtn.addEventListener("click", () => {
-      elements.questionInput.classList.remove("fullscreen");
-      elements.exitFullscreenBtn.classList.remove("show");
-    });
-
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") elements.exitFullscreenBtn.click();
-      if (e.ctrlKey && e.key === "Enter") elements.predictBtn.click();
-    });
-
-
-      elements.copyBtn.addEventListener("click", () => {
-      const output = elements.outputDiv.innerText.trim();
-
-      if (!output || output.includes("Your predictions will appear here")) {
+    elements.copyBtn.addEventListener("click", () => {
+      const output = elements.outputDiv.innerText;
+      if (!output.trim() || output.includes('Your predictions will appear here')) {
         showToast("No results to copy!", "warning");
         return;
       }
-
-      navigator.clipboard.writeText(output)
-        .then(() => showToast("Copied to clipboard!", "success"))
-        .catch(() => showToast("Failed to copy!", "error"));
+      navigator.clipboard.writeText(output).then(()=>showToast("✅ Results copied to clipboard!", "success"))
+      .catch(()=>showToast("Failed to copy. Please try again.", "error"));
     });
-
     elements.downloadBtn.addEventListener("click", () => {
-      const outputCards = elements.outputDiv.querySelectorAll(".result-card");
-
-      if (outputCards.length === 0) {
+      const output = elements.outputDiv.innerText;
+      if (!output.trim() || output.includes('Your predictions will appear here')) {
         showToast("No results to download!", "warning");
         return;
       }
-
       try {
         const { jsPDF } = window.jspdf;
         const pdf = new jsPDF();
-
-        let y = 20;
-
-        pdf.setFontSize(18);
-        pdf.text("Bloom's Taxonomy Classification Results", 105, y, { align: "center" });
-        y += 10;
-
-        pdf.setFontSize(10);
-        pdf.text(`Generated: ${new Date().toLocaleString()}`, 105, y, { align: "center" });
-        y += 15;
-
-        outputCards.forEach((card, index) => {
-          const question = card.querySelector(".question-text").innerText.trim();
-          const levelBadge = card.querySelector(".bloom-badge");
-          const level = levelBadge ? levelBadge.innerText.trim() : "Error";
-
-          if (y > 260) { pdf.addPage(); y = 20; }
-
-          pdf.setFontSize(12);
-          pdf.text(`Question ${index + 1}:`, 20, y);
-          y += 6;
-
+        const resultCards = elements.outputDiv.querySelectorAll('.result-card');
+        if (resultCards.length === 0) {
+          showToast("No results to download!", "warning");
+          return;
+        }
+        let yPos = 20;
+        pdf.setFontSize(20); pdf.setTextColor(45, 55, 72);
+        pdf.text("Bloom's Taxonomy Classification Results", 105, yPos, { align: 'center' });
+        yPos += 10;
+        pdf.setFontSize(10); pdf.setTextColor(100, 100, 100);
+        pdf.text(`Generated: ${new Date().toLocaleString()}`, 105, yPos, { align: 'center' });
+        yPos += 15;
+        pdf.setDrawColor(200, 200, 200); pdf.line(20, yPos, 190, yPos); yPos += 10;
+        resultCards.forEach((card, idx) => {
+          const questionText = card.querySelector('.question-text').textContent;
+          const bloomLevel = card.querySelector('.bloom-badge').textContent.trim();
+          if (yPos > 250) { pdf.addPage(); yPos = 20; }
+          pdf.setFontSize(11); pdf.setTextColor(0, 0, 0);
+          pdf.setFont(undefined, 'bold');
+          pdf.text(`Question ${idx + 1}:`, 20, yPos); yPos += 7;
+          pdf.setFont(undefined, 'normal');
           pdf.setFontSize(10);
-          const lines = pdf.splitTextToSize(question, 170);
-          pdf.text(lines, 20, y);
-          y += lines.length * 5 + 4;
-
-          if (level !== "Error") {
-            pdf.setTextColor(66, 153, 225);
-            pdf.text(`Predicted Level: ${level}`, 20, y);
-          } else {
-            pdf.setTextColor(220, 20, 60);
-            pdf.text("Error predicting this question", 20, y);
-          }
-
-          pdf.setTextColor(0, 0, 0);
-          y += 12;
+          const questionLines = pdf.splitTextToSize(questionText, 170);
+          pdf.text(questionLines, 20, yPos);
+          yPos += (questionLines.length * 5) + 3;
+          pdf.setFont(undefined, 'bold');
+          pdf.setTextColor(66, 153, 225);
+          pdf.text(`Predicted Level: ${bloomLevel}`, 20, yPos);
+          yPos += 12;
+          pdf.setDrawColor(230, 230, 230); pdf.line(20, yPos, 190, yPos); yPos += 8;
         });
-
-        pdf.save("bloom_taxonomy_results.pdf");
-        showToast("PDF downloaded!", "success");
-      }
-
-      catch (err) {
-        console.error(err);
-        showToast("Failed to generate PDF!", "error");
+        const pageCount = pdf.internal.getNumberOfPages();
+        for (let i = 1; i <= pageCount; i++) {
+          pdf.setPage(i);
+          pdf.setFontSize(8);
+          pdf.setTextColor(150, 150, 150);
+          pdf.text(`Page ${i} of ${pageCount}`, 105, 285, { align: 'center' });
+        }
+        pdf.save(`bloom_taxonomy_results_${new Date().toISOString().split('T')[0]}.pdf`);
+        showToast("📄 PDF downloaded successfully!", "success");
+      } catch (err) {
+        showToast("Failed to generate PDF. Please try again.", "error");
       }
     });
-
     elements.darkModeBtn.addEventListener("click", () => {
       document.body.classList.toggle("dark");
-      const darkEnabled = document.body.classList.contains("dark");
-
-      elements.darkModeBtn.innerHTML = darkEnabled
+      const isDark = document.body.classList.contains("dark");
+      elements.darkModeBtn.innerHTML = isDark
         ? '<i class="fa-solid fa-sun"></i> Light Mode'
         : '<i class="fa-solid fa-moon"></i> Dark Mode';
-
-      localStorage.setItem("darkMode", darkEnabled);
-      showToast(darkEnabled ? "🌙 Dark mode on" : "☀️ Light mode on", "success");
+      localStorage.setItem('darkMode', isDark);
+      showToast(`${isDark ? '🌙' : '☀️'} ${isDark ? 'Dark' : 'Light'} mode enabled`, "success");
     });
-
-    window.addEventListener("DOMContentLoaded", () => {
-      const saved = localStorage.getItem("darkMode");
-      if (saved === "true") {
-        document.body.classList.add("dark");
+    elements.fullscreenBtn.addEventListener("click", () => {
+      elements.questionInput.classList.add("fullscreen");
+      elements.exitFullscreenBtn.classList.add("show");
+      elements.questionInput.focus();
+      elements.questionInput.setAttribute('aria-live', 'assertive');
+    });
+    elements.exitFullscreenBtn.addEventListener("click", () => {
+      elements.questionInput.classList.remove("fullscreen");
+      elements.exitFullscreenBtn.classList.remove("show");
+      elements.questionInput.removeAttribute('aria-live');
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && elements.questionInput.classList.contains('fullscreen')) {
+        elements.exitFullscreenBtn.click();
+      }
+    });
+    elements.questionInput.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.key === 'Enter') {
+        e.preventDefault();
+        elements.predictBtn.click();
+      }
+    });
+    elements.helpBtn.addEventListener("click", () => {
+      elements.helpModal.classList.add("show");
+      elements.helpModal.setAttribute("aria-modal", "true");
+      elements.helpModal.focus();
+    });
+    elements.modalClose.addEventListener("click", () => {
+      elements.helpModal.classList.remove("show");
+    });
+    elements.helpModal.addEventListener("click", (e) => {
+      if (e.target === elements.helpModal) {
+        elements.helpModal.classList.remove("show");
+      }
+    });
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedDarkMode = localStorage.getItem('darkMode');
+      if (savedDarkMode === 'true') {
+        document.body.classList.add('dark');
         elements.darkModeBtn.innerHTML = '<i class="fa-solid fa-sun"></i> Light Mode';
       }
+      elements.questionInput.focus();
+      checkAPIStatus();
     });
-
     async function checkAPIStatus() {
-      const healthURL = API_URL.replace("/predict", "/health");
-
       try {
         const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 3000);
-
-        const res = await fetch(healthURL, { signal: controller.signal });
-        clearTimeout(timeout);
-
-        if (!res.ok) throw new Error("Health check failed");
-      } catch (_) {
-        // Just a silent check — no UI error needed
+        const timeoutId = setTimeout(() => controller.abort(), 3000);
+        const healthUrl = API_URL.replace('/predict', '/health');
+        const resp = await fetch(healthUrl, { signal: controller.signal });
+        clearTimeout(timeoutId);
+        if (!resp.ok) throw new Error('API health check failed');
+      } catch (err) {
+        if (!navigator.onLine) {
+          showToast("You appear to be offline. Predictions won't work without internet.", "warning");
+        }
       }
     }
-
-    checkAPIStatus();
-
   </script>
-
 </body>
 </html>
